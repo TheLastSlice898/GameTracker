@@ -1,8 +1,13 @@
 import psutil
+import json
+import time
 processlist= []
 
+with open('Data\detectable.json','r') as file:
+    jsondata = json.load(file)
 
 
+##print(jsondata[(0)])
 
 # check if the count of processes has changed
 
@@ -24,13 +29,30 @@ processlist= []
 # Check if idle 
 #   if so then add that istead of active time
 
+def CheckforProcess():
+    for proc in psutil.process_iter(['name']):
+        x = proc.info
+        name = x["name"]
+        nosuffix = str(name.lower())
+        print(nosuffix)
+        
+        for game_exe_name in jsondata.items():
+            if game_exe_name == nosuffix:
+                print('omg i did it')
 
 
 
-for process in psutil.process_iter():
-    processlist.append(process.name())
-print(processlist)
+    time.sleep(4)
+    print("i wiated")
     
+
+CheckforProcess()
+
+
+
+
+    
+
 
 
 
