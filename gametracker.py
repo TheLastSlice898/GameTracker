@@ -1,58 +1,60 @@
+## gametracker editor
+from tkinter import *
 import psutil
-import json
-import time
-processlist= []
-
-with open('Data\detectable.json','r') as file:
-    jsondata = json.load(file)
-
-
-##print(jsondata[(0)])
-
-# check if the count of processes has changed
-
-## if it has then check if its a game on the tracking list. 
 
 
 
-## then check if a game has closed 
-    #then take it off the list of tracked 
+
+Listofgames = []
+
+
+## read json file from data/folder 
+
+def createAddGameWindow():
+    new_window = Toplevel()
+    gamenamelable = Label(new_window,text="enter game name",font=('Arial',20,'bold'))
+    entryofgamename = Entry(new_window)
+    entryofgamename.config(font=('Terminal',20))
+    entryofgamename.config(bg='#111111')
+    entryofgamename.config(fg='white')
+
+    gametimelable = Label(new_window,text="enter game time",font=('Arial',20,'bold'))
+    entryofgametime = Entry(new_window)
+    entryofgametime.config(font=('Terminal',20))
+    entryofgametime.config(bg='#111111')
+    entryofgametime.config(fg='white')
+
+    gamenamelable.grid(row=0,column=0)
+    entryofgamename.grid(row=0,column=1)
+
+    gametimelable.grid(row=1,column=0)
+    entryofgametime.grid(row=1,column=1)
 
 
 
-## if the game is currently running add the time to the list of tracked games 
-## add time since its done this function to make sure it takes computational time into account. 
-
-
-## sort functions for different filters 
-
-# Check if idle 
-#   if so then add that istead of active time
-
-def CheckforProcess():
-    for proc in psutil.process_iter(['name']):
-        x = proc.info
-        name = x["name"]
-        nosuffix = str(name.lower())
-        print(nosuffix)
+    def submitgame():
+        global Listofgames
+        gamename = entryofgamename.get()
+        gametime = entryofgametime.get()
         
-        for game_exe_name in jsondata.items():
-            if game_exe_name == nosuffix:
-                print('omg i did it')
+        gameentry = dict(name=gamename,timeplayed=gametime)
 
+        labname = Label(window,textvariable=f'{gameentry.get('name')}',width=15,height=10)
+        labtime = Label(window,textvariable=f'{gameentry.get('timeplayed')}',width=15,height=10)
+        labname.pack()
+        labtime.pack()
+        print(gameentry)
+        newlistofgames = Listofgames.append(gameentry)
+        Listofgames = newlistofgames
+        window.update()
+        new_window.destroy()
 
+    submit = Button(new_window,text='submit',command=submitgame)
+    submit.grid(row=2)
 
-    time.sleep(4)
-    print("i wiated")
-    
+window = Tk(screenName="Widndow")
 
-CheckforProcess()
+addgame = Button(window,text='Add Game',command=createAddGameWindow)
+addgame.pack()
 
-
-
-
-    
-
-
-
-
+window.mainloop()
